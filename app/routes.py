@@ -1,11 +1,10 @@
 from flask import render_template, request
 import requests
 import json
-import configparser
 from app import app
 from app.forms import SearchSpotifyform
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST']) 
 def index():
 
     Spotifyform=SearchSpotifyform()
@@ -16,5 +15,7 @@ def index():
                                Spotifyform=Spotifyform)
     elif request.method == 'POST':
 
-        return render_template('result.html')
+        if Spotifyform.validate():
+            return render_template('result.html',
+                                   )
 
