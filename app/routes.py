@@ -25,11 +25,16 @@ def get_sp_client():
 
     return sp
 
+def getOneFeature(sp, songURI):
+    audioFeaturesRaw = sp.audio_features(songURI)[0]
+
+    return audioFeaturesRaw
 
 def getFeatures(sp, songData):
     playlistURI = songData['uris']
     songNames = songData['names']
     audioFeaturesRaw = sp.audio_features(playlistURI)
+
 
     danceability = []
     energy = []
@@ -44,6 +49,8 @@ def getFeatures(sp, songData):
     duration_ms = []
     time_signature = []
     uris = []
+
+    trackList = []
 
     for track in audioFeaturesRaw:
         #         print(track)
@@ -60,6 +67,8 @@ def getFeatures(sp, songData):
         duration_ms.append(track['duration_ms'])
         time_signature.append(track['time_signature'])
         uris.append(track['uri'])
+
+        trackList.append(track)
 
     playlistFeatures = {
         'danceability': danceability,
@@ -78,8 +87,17 @@ def getFeatures(sp, songData):
         'songNames': songNames
     }
 
-    return playlistFeatures
+    return trackList, playlistFeatures
 
+def getRecommendations(sp, seedURI, val):
+    print(seedURI)
+    print(val)
+
+    recommendations = sp.recommendations(seed_tracks=[seedURI], target_danceability=val)
+    print(recommendations)
+    # print(recommendations['tracks'][0]['name'])
+
+    return
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -90,6 +108,7 @@ def index():
     user = 'jup118'
     playlistId = '0iGABH7qHUQpHsz0yaUxTV'
     startingTrackNum = 4
+    seedSongId = '7tSCXqS0evaolLl3jIuodQ'
 
     sp = get_sp_client()
     playlistTracks = sp.user_playlist_tracks(user, playlistId)
@@ -98,10 +117,34 @@ def index():
     trackData = trackInfoBasic(playlistTracks)
 
     #2. Get features
-    trackFeaturesDict = getFeatures(sp, trackData)
-    print(trackFeaturesDict)
+    trackList, trackFeaturesDict = getFeatures(sp, trackData)
 
-    #
+    # print(trackList[startingTrackNum])
+    #3. Get features for seed Song
+    seedSongData = getOneFeature(sp, seedSongId)
+    print(seedSongData['id'])
+    newSongs = []
+
+    for i in range(startingTrackNum-1, len(trackList)-1):
+
+        benchmarkDance = trackList[i]['danceability']
+        nextDance = trackList[i+1]['danceability']
+        danceDiff = round(benchmarkDance-nextDance, 3)
+
+        targetVal = seedSongData['danceability']+danceDiff
+
+        recSong = getRecommendations(sp, seedSongData['id'], targetVal)
+        newSongs.append(recSong)
+        break
+
+
+
+
+
+
+    # Get difference from
+
+    #3.
 
 
     if request.method == 'GET':
