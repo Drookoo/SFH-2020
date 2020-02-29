@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+
+<div class="container">
+<div class="jumbotron">
+<h1 class="display-3">SFH 2020</h1>
+</div></div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+      <form action="" method="post" novalidate>
+        {{ Spotifyform.hidden_tag() }}
+        <p>
+            {{ Spotifyform.query.label }}<br>
+            {{ Spotifyform.query(size=25) }}
+        </p>
+        <p>{{ Spotifyform.submit() }}</p>
+      </form>
+    </div>
+
+
+
+  </div>
+
+
+</div>
+
+
+{% endblock %}
