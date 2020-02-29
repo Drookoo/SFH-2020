@@ -3,6 +3,7 @@ import requests
 import json
 from app import app
 from app.forms import SearchSpotifyform
+import spotipy
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -16,6 +17,7 @@ def index():
     elif request.method == 'POST':
 
         if Spotifyform.validate():
-            return render_template('result.html',
-                                   )
+
+
+            return render_template('result.html')
 
