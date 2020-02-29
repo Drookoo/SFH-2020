@@ -4,7 +4,7 @@ import json
 from app import app
 from app.forms import SearchSpotifyform
 
-@app.route('/', methods=['GET', 'POST']) 
+@app.route('/', methods=['GET', 'POST'])
 def index():
 
     Spotifyform=SearchSpotifyform()

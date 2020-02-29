@@ -1,4 +1,3 @@
 Flask==1.1.1
 WTForms==2.2.1
-requests
-configparser
+spotipy==2.4.4
