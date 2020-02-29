@@ -12,6 +12,7 @@ secret = '520f13ab9f7747919d705f2ccc5dcd2b'
 username = 'jup118'
 scope = 'playlist-read-private playlist-modify-public playlist-read-private playlist-modify-private'
 
-token = util.prompt_for_user_token(username=username, scope=scope, client_id=client, client_secret=secret, redirect_uri='http://localhost/')
+token = util.prompt_for_user_token(username, scope, client_id=client, client_secret=secret, redirect_uri='http://localhost/')
 
 os.environ['SPOTIFY_TOKEN'] = token
+print(token)
